@@ -63,6 +63,8 @@ public class Trie {
         System.out.println();
         System.out.println("This test should report false:");
         System.out.println("Contains 's': " + trie.contains("s"));
+        System.out.println("Contains 'bye': " + trie.contains("bye"));
+        System.out.println("Contains 'bird': " + trie.contains("bird"));
 
         System.out.println();
         System.out.println("These tests should report true:");

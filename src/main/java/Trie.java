@@ -13,7 +13,7 @@ public class Trie {
     }
 
     public void addWords(List<String> words) {
-        for (String word: words) {
+        for (String word : words) {
             insert(word);
         }
     }
@@ -31,6 +31,7 @@ public class Trie {
 
             current = child;
         }
+        current.setTerminal(true);
     }
 
     public boolean contains(String potentialWord) {
@@ -48,6 +49,54 @@ public class Trie {
         return current.isTerminal();
     }
 
+    public void remove(String word) {
+        EntryNode current = trie.getRoot();
+        String wordStorage = "";
+        EntryNode child = null;
+
+        if (contains(word)) {
+
+            for (int i = 0; i < word.length(); i++) {
+                char character = word.charAt(i);
+
+                if (current.getChild(character) != null || word.length() - 1 == 0) {
+                    child = current.getChild(character);
+
+                } else if (word.length() - 1 == 1) {
+                    character = word.charAt(i++);
+                    child = current.getChild(character);
+                }
+
+                if (i == word.length() - 1) {
+
+                    if (child == null) {
+                        trie.getRoot().setNull(current);
+
+                    } else if (current.isTerminal() && child.isTerminal()) {
+                        current.setNull(child);
+                        break;
+
+                    } else if (child.hasChild(child)) {
+                        break;
+
+                    } else {
+                        current.setNull(child);
+                        current.setTerminal(true);
+                        word = wordStorage;
+                        wordStorage = "";
+                        current = trie.getRoot();
+                        character = word.charAt(0);
+                        child = current.getChild(character);
+                        i = -1;
+                    }
+                }
+
+                current = child;
+                wordStorage += character;
+            }
+        }
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         Scanner scan = new Scanner(new File("src/main/resources/dictionary.txt"));
         List<String> words = new ArrayList<>();
@@ -60,7 +109,15 @@ public class Trie {
         trie.addWords(words);
         trie.printTrie();
 
+        trie.remove("shorebird");
+        trie.remove("she");
+        trie.remove("shells");
+        trie.remove("shorebird");
+        trie.remove("by");
+        trie.remove("the");
+
         System.out.println();
+        trie.printTrie();
         System.out.println("This test should report false:");
         System.out.println("Contains 's': " + trie.contains("s"));
         System.out.println("Contains 'bye': " + trie.contains("bye"));

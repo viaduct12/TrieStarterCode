@@ -15,10 +15,10 @@ public class EntryNode {
         this.isTerminal = isTerminal;
     }
 
-
     EntryNode getChild(Character data) {
         return children.get(data);
     }
+
 
     void addChild(EntryNode child) {
         this.children.put(child.letter, child);
@@ -30,6 +30,14 @@ public class EntryNode {
 
     void setTerminal(boolean isTerminal) {
         this.isTerminal = isTerminal;
+    }
+
+    boolean hasChild(EntryNode child){
+        return child.children.size() > 0;
+    }
+
+    void setNull(EntryNode child){
+        children.remove(child.letter, child);
     }
 
     @Override
